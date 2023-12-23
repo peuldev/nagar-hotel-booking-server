@@ -24,6 +24,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const specialOffers = client.db("Special_Offers").collection("Offers");
+    const featuredRoom = client.db("featured_Room").collection("featured");
     app.get("/offers", async (req, res) => {
       const cursor = specialOffers.find();
       const result = await cursor.toArray();
@@ -35,6 +36,12 @@ async function run() {
       const result = await specialOffers.findOne(query);
       res.send(result);
     });
+    app.get("/featured", async (req, res) => {
+      const cursor = featuredRoom.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
