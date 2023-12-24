@@ -23,8 +23,14 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+    const rooms = client.db("Hotel_Rooms").collection("Rooms");
     const specialOffers = client.db("Special_Offers").collection("Offers");
     const featuredRoom = client.db("featured_Room").collection("featured");
+    app.get("/rooms", async (req, res) => {
+      const cursor = rooms.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
     app.get("/offers", async (req, res) => {
       const cursor = specialOffers.find();
       const result = await cursor.toArray();
