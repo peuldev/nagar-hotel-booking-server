@@ -26,6 +26,7 @@ async function run() {
     const rooms = client.db("Hotel_Rooms").collection("Rooms");
     const specialOffers = client.db("Special_Offers").collection("Offers");
     const featuredRoom = client.db("featured_Room").collection("featured");
+    const confirmationroom = client.db("confirmation").collection("room");
     app.get("/rooms", async (req, res) => {
       const cursor = rooms.find();
       const result = await cursor.toArray();
@@ -58,6 +59,14 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await featuredRoom.findOne(query);
+      res.send(result);
+    });
+
+    // checkout
+    app.post("/confirmation", async (req, res) => {
+      const confirmation = req.body;
+      console.log(confirmation);
+      const result = await confirmationroom.insertOne(confirmation);
       res.send(result);
     });
     // Send a ping to confirm a successful connection
