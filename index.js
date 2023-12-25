@@ -63,15 +63,10 @@ async function run() {
     });
 
     app.get("/confirmation", async (req, res) => {
-      let query = {};
-      if (req.query) {
-        query = { email: req.query.email };
-      }
-      const result = await confirmationroom.find(query).toArray();
+      const result = await confirmationroom.find().toArray();
       res.send(result);
     });
-
-    // checkout
+    // confirmation
     app.post("/confirmation", async (req, res) => {
       const confirmation = req.body;
       console.log(confirmation);
