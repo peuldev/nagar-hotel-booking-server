@@ -63,17 +63,42 @@ async function run() {
     });
 
     app.get("/confirmation", async (req, res) => {
-      console.log(req.query);
       if (req.query.email) {
         query = { email: req.query.email };
       }
       const result = await confirmationroom.find().toArray();
       res.send(result);
     });
+
+    app.get("/confirmation/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await confirmationroom.findOne(query);
+      res.send(result);
+    });
+
+    app.put("/confirmation/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateProduct = req.body;
+      const product = {
+        $set: {
+          firstName: updateProduct.firstName,
+          lastName: updateProduct.lastName,
+          location: updateProduct.location,
+          yourEmail: updateProduct.yourEmail,
+          CheckIn: updateProduct.CheckIn,
+          CheckOut: updateProduct.CheckOut,
+        },
+      };
+      const result = await confirmationroom.updateOne(filter, product, options);
+      res.send(result);
+    });
+
     // confirmation
     app.post("/confirmation", async (req, res) => {
       const confirmation = req.body;
-      console.log(confirmation);
       const result = await confirmationroom.insertOne(confirmation);
       res.send(result);
     });
